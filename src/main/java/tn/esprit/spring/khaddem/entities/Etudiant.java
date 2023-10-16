@@ -2,10 +2,6 @@ package tn.esprit.spring.khaddem.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,7 +19,9 @@ public class Etudiant  implements Serializable {
     @Enumerated(EnumType.STRING)
     private  Option op;
 
+    public Etudiant() {
 
+    }
 
 
     @Override
@@ -39,8 +37,6 @@ public class Etudiant  implements Serializable {
                 '}';
     }
 
-    public Etudiant() {
-    }
 
     public Etudiant(Integer idEtudiant, String prenomE, String nomE, Option op, Departement departement, List<Equipe> equipes, List<Contrat> contrats) {
         this.idEtudiant = idEtudiant;
