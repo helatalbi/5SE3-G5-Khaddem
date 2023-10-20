@@ -11,14 +11,16 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import tn.esprit.spring.khaddem.entities.Departement;
 import tn.esprit.spring.khaddem.entities.Universite;
+import tn.esprit.spring.khaddem.repositories.DepartementRepository;
 import tn.esprit.spring.khaddem.repositories.UniversiteRepository;
 import tn.esprit.spring.khaddem.services.UniversiteServiceImpl;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.transaction.Transactional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
      @ExtendWith(MockitoExtension.class)
@@ -29,12 +31,18 @@ import static org.mockito.Mockito.when;
 
         @Mock
         private UniversiteRepository universiteRepository;
+         @Mock
 
-        @BeforeEach
+         private DepartementRepository departementRepository;
+
+
+         @BeforeEach
         public void setUp() {
             MockitoAnnotations.openMocks(this);
         }
 
+
+        // Test for the add
         @Test
         public void testAddUniversite() {
             // Mock data
@@ -52,9 +60,10 @@ import static org.mockito.Mockito.when;
             assertEquals("Test University", addedUniversite.getNomUniv());
         }
 
+
+
         @Test
         public void testRetrieveAllUniversites() {
-            // Mock data
             Universite universite1 = new Universite();
             universite1.setIdUniversite(1);
             universite1.setNomUniv("University 1");
@@ -69,7 +78,6 @@ import static org.mockito.Mockito.when;
 
             when(universiteRepository.findAll()).thenReturn(universiteList);
 
-            // Call the method under test
             List<Universite> retrievedUniversites = universiteService.retrieveAllUniversites();
 
             // Assertions
@@ -81,4 +89,47 @@ import static org.mockito.Mockito.when;
         }
 
 
-    }
+         @Test
+         public void testUpdateUniversite() {
+
+             Universite university = new Universite();
+             university.setIdUniversite(1);  // Set a sample ID
+             university.setNomUniv("Test University");
+             Mockito.when(universiteRepository.save(Mockito.any(Universite.class))).thenReturn(university);
+             Universite updatedUniversity = universiteService.updateUniversite(university);
+             assertSame(university, updatedUniversity);
+             Mockito.verify(universiteRepository, Mockito.times(1)).save(Mockito.any(Universite.class));
+         }
+
+         @Test
+         public void testRetrieveUniversite() {
+             Universite university = new Universite();
+             university.setIdUniversite(1);  // Set a sample ID
+             Mockito.when(universiteRepository.findById(1)).thenReturn(Optional.of(university));
+             Universite retrievedUniversity = universiteService.retrieveUniversite(1);
+             assertNotNull(retrievedUniversity);
+             assertEquals(1, retrievedUniversity.getIdUniversite());
+         }
+
+
+         @Transactional
+         public void assignUniversiteToDepartement(Integer universiteId, Integer departementId) {
+             Universite universite = universiteRepository.findById(universiteId).orElse(null);
+             Departement departement = departementRepository.findById(departementId).orElse(null);
+
+             if (universite != null && departement != null) {
+                 List<Departement> departements = universite.getDepartements();
+
+                 if (departements == null) {
+                     departements = new ArrayList<>();
+                     universite.setDepartements(departements);
+                 }
+
+                 departements.add(departement);
+                 universiteRepository.save(universite);
+             }
+         }
+
+     }
+
+
