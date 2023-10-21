@@ -38,13 +38,13 @@ public class EtudiantServiceTest {
    @Mock
     private ContratServiceImpl contratService;
 
-    @Mock(lenient = true)
+    @Mock
     private EtudiantRepository etudiantRepository;
 
-    @Mock(lenient = true)
+    @Mock
     private ContratRepository contratRepository;
 
-    @Mock(lenient = true)
+    @Mock
     private EquipeRepository equipeRepository;
 
     @Mock
@@ -148,8 +148,8 @@ public class EtudiantServiceTest {
         Etudiant ajoutEtudiant2 = etudiantService.addEtudiant(etudiant2);
 
         // Étape 4 : Suppression de l'étudiant 2 (en utilisant @Mock)
-        when(etudiantRepository.findById(ajoutEtudiant2.getIdEtudiant())).thenReturn(Optional.of(ajoutEtudiant2));
-        doNothing().when(etudiantRepository).delete(ajoutEtudiant2);
+   //       when(etudiantRepository.findById(ajoutEtudiant2.getIdEtudiant())).thenReturn(Optional.of(ajoutEtudiant2));
+  //      doNothing().when(etudiantRepository).delete(ajoutEtudiant2);
         etudiantService.removeEtudiant(ajoutEtudiant2.getIdEtudiant());
 
         // Assertion pour vérifier que l'étudiant 2 a bien été supprimé
@@ -255,7 +255,7 @@ public class EtudiantServiceTest {
         etudiant.setNomE("HOUSSEM");
         etudiant.setIdEtudiant(7);
 
-        when(etudiantRepository.findById(etudiant.getIdEtudiant())).thenReturn(Optional.of(etudiant));
+//        when(etudiantRepository.findById(etudiant.getIdEtudiant())).thenReturn(Optional.of(etudiant));
         when(equipeRepository.findById(equipe.getIdEquipe())).thenReturn(Optional.of(equipe));
         when(contratRepository.findById(contrat.getIdContrat())).thenReturn(Optional.of(contrat));
 
