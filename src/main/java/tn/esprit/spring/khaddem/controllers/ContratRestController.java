@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/contrat")
+@CrossOrigin(origins = "*")
 public class ContratRestController {
     IContratService contratService;
 

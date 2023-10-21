@@ -21,7 +21,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class) // Assurez-vous que vous utilisez l'extension Mockito
-@SpringBootTest(classes = KhaddemApplication.class)
 public class EtudiantServiceTest {
 
     @InjectMocks
