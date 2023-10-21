@@ -23,7 +23,6 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class) // Assurez-vous que vous utilisez l'extension Mockito
-@SpringBootTest
 public class EtudiantServiceTest {
 
     @InjectMocks
