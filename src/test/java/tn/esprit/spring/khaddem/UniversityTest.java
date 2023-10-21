@@ -112,23 +112,23 @@ import static org.mockito.Mockito.when;
          }
 
 
-         @Transactional
-         public void assignUniversiteToDepartement(Integer universiteId, Integer departementId) {
-             Universite universite = universiteRepository.findById(universiteId).orElse(null);
-             Departement departement = departementRepository.findById(departementId).orElse(null);
-
-             if (universite != null && departement != null) {
-                 List<Departement> departements = universite.getDepartements();
-
-                 if (departements == null) {
-                     departements = new ArrayList<>();
-                     universite.setDepartements(departements);
-                 }
-
-                 departements.add(departement);
-                 universiteRepository.save(universite);
-             }
-         }
+//             @Test
+//             public void assignUniversiteToDepartement(Integer universiteId, Integer departementId) {
+//             Universite universite = universiteRepository.findById(universiteId).orElse(null);
+//             Departement departement = departementRepository.findById(departementId).orElse(null);
+//
+//             if (universite != null && departement != null) {
+//                 List<Departement> departements = universite.getDepartements();
+//
+//                 if (departements == null) {
+//                     departements = new ArrayList<>();
+//                     universite.setDepartements(departements);
+//                 }
+//
+//                 departements.add(departement);
+//                 universiteRepository.save(universite);
+//             }
+//         }
 
      }
 

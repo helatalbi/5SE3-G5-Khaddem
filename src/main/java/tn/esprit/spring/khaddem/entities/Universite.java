@@ -22,6 +22,7 @@ public class Universite implements Serializable {
     private Integer idUniversite;
     private String nomUniv;
     @OneToMany(cascade = CascadeType.ALL)
-  //  @JsonIgnore
+    //@JsonIgnore
+
     private List<Departement>departements;
 }
