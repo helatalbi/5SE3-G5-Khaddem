@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class) // Assurez-vous que vous utilisez l'extension Mockito
 public class EtudiantServiceTest {
-
+    //helaa
     @InjectMocks
     private EtudiantServiceImpl etudiantService;
 
