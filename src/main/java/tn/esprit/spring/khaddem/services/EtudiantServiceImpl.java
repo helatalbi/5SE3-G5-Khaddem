@@ -81,26 +81,44 @@ public class EtudiantServiceImpl implements IEtudiantService{
         return etudiantRepository.retrieveEtudiantsByContratSpecialiteSQL(specialite);
     }
 
-    @Transactional
-    public Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe) {
-        Contrat contrat = contratRepository.findById(idContrat).get();
-        Equipe equipe=equipeRepository.findById(idEquipe).get();
-        Etudiant etudiant= etudiantRepository.save(e);
-        log.info("contrat: "+contrat.getSpecialite());
-        log.info("equipe: "+equipe.getNomEquipe());
-        log.info("etudiant: "+etudiant.getNomE()+" "+etudiant.getPrenomE()+" "+etudiant.getOp());
-        List<Equipe> equipesMisesAjour = new ArrayList<>();
-        contrat.setEtudiant(etudiant);
-        if(etudiant.getEquipes()!=null) {
-            equipesMisesAjour=etudiant.getEquipes();
+    //@Transactional
+   // public Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe) {
+      //  Contrat contrat = contratRepository.findById(idContrat).get();
+        //Equipe equipe = equipeRepository.findById(idEquipe).get();
+        //Etudiant etudiant = etudiantRepository.save(e);
+
+        // Uncomment the following log statements to provide more information for debugging:
+
+        // log.info("contrat: " + contrat.getSpecialite());
+        // log.info("equipe: " + equipe.getNomEquipe());
+        // log.info("etudiant: " + etudiant.getNomE() + " " + etudiant.getPrenomE() + " " + etudiant.getOp());
+
+     //   List<Equipe> equipesMisesAjour = new ArrayList<>();
+   //     contrat.setEtudiant(etudiant);
+
+     //   if (etudiant.getEquipes() != null) {
+       //     equipesMisesAjour = etudiant.getEquipes();
+/*
         }
         equipesMisesAjour.add(equipe);
-        log.info("taille apres ajout : "+equipesMisesAjour.size());
+        log.info("taille apres ajout : " + equipesMisesAjour.size());
         etudiant.setEquipes(equipesMisesAjour);
-
 
         return e;
     }
+*/
+     @Transactional
+     public Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe){
+         Contrat c=contratRepository.findById(idContrat).orElse(null);
+         Equipe eq=equipeRepository.findById(idEquipe).orElse(null);
+         c.setEtudiant(e);
+         eq.getEtudiants().add(e);
+         equipeRepository.save(eq);
+         contratRepository.save(c);
+         etudiantRepository.save(e);
+         return e;
+     }
+
 
     @Override
     public List<Etudiant> getEtudiantsByDepartement(Integer idDepartement) {

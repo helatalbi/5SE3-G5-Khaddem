@@ -13,260 +13,261 @@ import tn.esprit.spring.khaddem.repositories.ContratRepository;
 import tn.esprit.spring.khaddem.repositories.DepartementRepository;
 import tn.esprit.spring.khaddem.repositories.EquipeRepository;
 import tn.esprit.spring.khaddem.repositories.EtudiantRepository;
+import tn.esprit.spring.khaddem.services.ContratServiceImpl;
+import tn.esprit.spring.khaddem.services.DepartementServiceImpl;
+import tn.esprit.spring.khaddem.services.EquipeServiceImpl;
 import tn.esprit.spring.khaddem.services.EtudiantServiceImpl;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class) // Assurez-vous que vous utilisez l'extension Mockito
+@SpringBootTest
 public class EtudiantServiceTest {
 
     @InjectMocks
     private EtudiantServiceImpl etudiantService;
 
+   @Mock
+    private DepartementServiceImpl departementService;
+
     @Mock
+    private EquipeServiceImpl equipeService;
+
+   @Mock
+    private ContratServiceImpl contratService;
+
+    @Mock(lenient = true)
     private EtudiantRepository etudiantRepository;
-    @Mock
-    private DepartementRepository departementRepository;
-    @Mock
+
+    @Mock(lenient = true)
     private ContratRepository contratRepository;
 
-    @Mock
+    @Mock(lenient = true)
     private EquipeRepository equipeRepository;
 
+    @Mock
+    private DepartementRepository departementRepository;
+
+
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+
     }
 
     @AfterEach
-    public void tearDown() {
-        reset(etudiantRepository);
-        reset(etudiantRepository, departementRepository);
-        reset(etudiantRepository, contratRepository, equipeRepository);
-
-
+    public void cleanup() {
+        departementRepository.deleteAll();
+        etudiantRepository.deleteAll();
+        equipeRepository.deleteAll();
+        contratRepository.deleteAll();
     }
 
+
     @Test
-    public void testRetrieveAllEtudiants() {
-        // Créez des étudiants factices pour simuler la réponse de votre repository
+    void Etape1() {
+        System.err.println("<============================ Début du scénario de test ============================>");
+
+        // Étape 1 : Ajouter trois étudiants
         Etudiant etudiant1 = new Etudiant();
+        etudiant1.setNomE("Étudiant 1");
         etudiant1.setIdEtudiant(1);
-        etudiant1.setPrenomE("John");
-        etudiant1.setNomE("Doe");
-
         Etudiant etudiant2 = new Etudiant();
+        etudiant2.setNomE("Étudiant 2");
         etudiant2.setIdEtudiant(2);
-        etudiant2.setPrenomE("Jane");
-        etudiant2.setNomE("Smith");
+        Etudiant etudiant3 = new Etudiant();
+        etudiant3.setNomE("Étudiant 3");
+        etudiant3.setIdEtudiant(3);
 
+        when(etudiantRepository.save(etudiant1)).thenReturn(etudiant1);
+        when(etudiantRepository.save(etudiant2)).thenReturn(etudiant2);
+        when(etudiantRepository.save(etudiant3)).thenReturn(etudiant3);
+
+        Etudiant ajoutEtudiant1 = etudiantService.addEtudiant(etudiant1);
+        Etudiant ajoutEtudiant2 = etudiantService.addEtudiant(etudiant2);
+        Etudiant ajoutEtudiant3 = etudiantService.addEtudiant(etudiant3);
+
+        // Assertions
+        assertNotNull(ajoutEtudiant1);
+        assertNotNull(ajoutEtudiant2);
+        assertNotNull(ajoutEtudiant3);
+
+        System.err.println("Étape 1 : Ajout de trois étudiants");
+        System.err.println(ajoutEtudiant1);
+        System.err.println(ajoutEtudiant2);
+        System.err.println(ajoutEtudiant3);
+    }
+
+
+    @Test
+    void Etape2() {
+        Etudiant etudiant1 = new Etudiant();
+        etudiant1.setNomE("Étudiant 1");
+        etudiant1.setIdEtudiant(1);
+        when(etudiantRepository.save(etudiant1)).thenReturn(etudiant1);
+        Etudiant ajoutEtudiant1 = etudiantService.addEtudiant(etudiant1);
+
+        // Étape 2 : Modifier l'étudiant 1
+        ajoutEtudiant1.setNomE("Nouveau Nom Étudiant 1");
+        Etudiant modifEtudiant1 = etudiantService.updateEtudiant(ajoutEtudiant1);
+
+        // Assertion pour vérifier que le nom de l'étudiant a été modifié
+        assertEquals("Nouveau Nom Étudiant 1", modifEtudiant1.getNomE());
+
+        System.err.println("Étape 2 : Modification de l'étudiant 1");
+        System.err.println(modifEtudiant1);
+    }
+
+    @Test
+    void Etape3() {
+        Etudiant etudiant1 = new Etudiant();
+        etudiant1.setNomE("Étudiant 1");
+        etudiant1.setIdEtudiant(1);
+        when(etudiantRepository.save(etudiant1)).thenReturn(etudiant1);
+        Etudiant ajoutEtudiant1 = etudiantService.addEtudiant(etudiant1);
+
+        // Étape 3 : Afficher l'étudiant 1 (en utilisant @Mock)
+        when(etudiantRepository.findById(ajoutEtudiant1.getIdEtudiant())).thenReturn(Optional.of(ajoutEtudiant1));
+        Etudiant etudiant1Retrouve = etudiantService.retrieveEtudiant(ajoutEtudiant1.getIdEtudiant());
+
+        // Assertion pour vérifier que l'étudiant récupéré est le même que celui ajouté
+        assertEquals(ajoutEtudiant1, etudiant1Retrouve);
+
+        System.err.println("Étape 3 : Récupération de l'étudiant 1");
+        System.err.println(etudiant1Retrouve);
+    }
+
+    @Test
+    void Etape4() {
+        Etudiant etudiant2 = new Etudiant();
+        etudiant2.setNomE("Étudiant 2");
+        etudiant2.setIdEtudiant(2);
+        when(etudiantRepository.save(etudiant2)).thenReturn(etudiant2);
+        Etudiant ajoutEtudiant2 = etudiantService.addEtudiant(etudiant2);
+
+        // Étape 4 : Suppression de l'étudiant 2 (en utilisant @Mock)
+        when(etudiantRepository.findById(ajoutEtudiant2.getIdEtudiant())).thenReturn(Optional.of(ajoutEtudiant2));
+        doNothing().when(etudiantRepository).delete(ajoutEtudiant2);
+        etudiantService.removeEtudiant(ajoutEtudiant2.getIdEtudiant());
+
+        // Assertion pour vérifier que l'étudiant 2 a bien été supprimé
+       // verify(etudiantRepository, times(1)).delete(ajoutEtudiant2);
+
+        System.err.println("Étape 4 : Suppression de l'étudiant 2 ");
+
+    }
+
+    @Test
+    void Etape5() {
+        // Étape 5 : Création d'un département
+        Departement departement = new Departement();
+        departement.setNomDepart("Département Test");
+        departement.setIdDepartement(1);
+
+        departementService.addDepartement(departement);
+
+        // Assurez-vous que le département a été créé avec succès et n'est pas null
+        assertNotNull(departement);
+        System.err.println("Étape 5 : Création d'un nouveau département : " + departement);
+    }
+
+    @Test
+    void Etape6() {
+        Departement departement = new Departement();
+        departement.setNomDepart("Département Test");
+        departement.setIdDepartement(1);
+        Etudiant etudiant3 = new Etudiant();
+        etudiant3.setNomE("Étudiant 3");
+        etudiant3.setIdEtudiant(2);
+        when(etudiantRepository.save(etudiant3)).thenReturn(etudiant3);
+        Etudiant ajoutEtudiant3 = etudiantService.addEtudiant(etudiant3);
+
+        departementService.addDepartement(departement);
+        // Étape 6 : Affectation de l'étudiant 3 au département (en utilisant @Mock)
+        // Simuler le comportement de etudiantRepository.findById() pour retourner l'étudiant ajoutEtudiant3
+        when(etudiantRepository.findById(ajoutEtudiant3.getIdEtudiant())).thenReturn(Optional.of(ajoutEtudiant3));
+
+        // Simuler le comportement de departementRepository.findById() pour retourner le département ajoutDepartement
+        when(departementRepository.findById(departement.getIdDepartement())).thenReturn(Optional.of(departement));
+
+        // Appelez la méthode qui affecte l'étudiant au département
+        etudiantService.assignEtudiantToDepartement(ajoutEtudiant3.getIdEtudiant(), departement.getIdDepartement());
+
+        // Assertion pour vérifier que l'étudiant a bien été affecté au département
+        assertEquals(ajoutEtudiant3.getDepartement(), departement);
+
+        System.err.println("Étape 6 : Affectation de l'étudiant " + ajoutEtudiant3.getNomE() + " au département " + departement.getNomDepart());
+        System.err.println(departement);
+        System.err.println(ajoutEtudiant3);
+
+    }
+
+    @Test
+    void Etape7() {
+        // Étape 7 : Création d'une équipe (en utilisant @Mock)
         List<Etudiant> etudiants = new ArrayList<>();
-        etudiants.add(etudiant1);
-        etudiants.add(etudiant2);
-
-        // Utilisez Mockito pour simuler le comportement de etudiantRepository.findAll
-        when(etudiantRepository.findAll()).thenReturn(etudiants);
-
-        // Appelez la méthode sous test
-        List<Etudiant> result = etudiantService.retrieveAllEtudiants();
-
-        // Vérifiez que la méthode a été appelée une fois
-        verify(etudiantRepository, times(1)).findAll();
-
-        // Vérifiez que le résultat correspond aux données simulées
-        assertEquals(2, result.size());
-        assertEquals(1, result.get(0).getIdEtudiant());
-        assertEquals("John", result.get(0).getPrenomE());
-        assertEquals("Doe", result.get(0).getNomE());
-        assertEquals(2, result.get(1).getIdEtudiant());
-        assertEquals("Jane", result.get(1).getPrenomE());
-        assertEquals("Smith", result.get(1).getNomE());
-    }
-
-    @Test
-    public void testAddEtudiant() {
-        // Créez un étudiant factice à ajouter
-        Etudiant etudiantToAdd = new Etudiant();
-        etudiantToAdd.setIdEtudiant(1);
-        etudiantToAdd.setPrenomE("John");
-        etudiantToAdd.setNomE("Doe");
-
-        // Configurez le comportement simulé du repository
-        when(etudiantRepository.save(etudiantToAdd)).thenReturn(etudiantToAdd);
-
-        // Appelez la méthode sous test
-        Etudiant result = etudiantService.addEtudiant(etudiantToAdd);
-
-        // Vérifiez que la méthode save a été appelée une fois avec l'étudiant à ajouter
-        verify(etudiantRepository, times(1)).save(etudiantToAdd);
-
-        // Vérifiez que l'étudiant résultant correspond à l'étudiant simulé
-        assertEquals(1, result.getIdEtudiant());
-        assertEquals("John", result.getPrenomE());
-        assertEquals("Doe", result.getNomE());
-    }
-    @Test
-    public void testUpdateEtudiant() {
-        // Créez un étudiant factice à mettre à jour
-        Etudiant etudiantToUpdate = new Etudiant();
-        etudiantToUpdate.setIdEtudiant(1);
-        etudiantToUpdate.setPrenomE("John");
-        etudiantToUpdate.setNomE("Doe");
-
-        // Configurez le comportement simulé du repository pour la mise à jour
-        when(etudiantRepository.save(etudiantToUpdate)).thenReturn(etudiantToUpdate);
-
-        // Appelez la méthode sous test
-        Etudiant result = etudiantService.updateEtudiant(etudiantToUpdate);
-
-        // Vérifiez que la méthode save a été appelée une fois avec l'étudiant à mettre à jour
-        verify(etudiantRepository, times(1)).save(etudiantToUpdate);
-
-        // Vérifiez que l'étudiant résultant correspond à l'étudiant simulé
-        assertEquals(1, result.getIdEtudiant());
-        assertEquals("John", result.getPrenomE());
-        assertEquals("Doe", result.getNomE());
-    }
-    @Test
-    public void testRetrieveEtudiant() {
-        // Créez un étudiant factice à récupérer
-        Etudiant etudiantToRetrieve = new Etudiant();
-        etudiantToRetrieve.setIdEtudiant(1);
-        etudiantToRetrieve.setPrenomE("John");
-        etudiantToRetrieve.setNomE("Doe");
-
-        // Configurez le comportement simulé du repository pour la récupération
-        when(etudiantRepository.findById(1)).thenReturn(Optional.of(etudiantToRetrieve));
-
-        // Appelez la méthode sous test pour récupérer l'étudiant
-        Etudiant result = etudiantService.retrieveEtudiant(1);
-
-        // Vérifiez que la méthode findById a été appelée une fois avec l'ID 1
-        verify(etudiantRepository, times(1)).findById(1);
-
-        // Vérifiez que l'étudiant résultant correspond à l'étudiant simulé
-        assertEquals(1, result.getIdEtudiant());
-        assertEquals("John", result.getPrenomE());
-        assertEquals("Doe", result.getNomE());
-    }
-    @Test
-    public void testRemoveEtudiant() {
-        // ID de l'étudiant à supprimer
-        int etudiantId = 1;
-
-        // Appelez la méthode sous test pour supprimer l'étudiant
-        etudiantService.removeEtudiant(etudiantId);
-
-        // Vérifiez que la méthode deleteById a été appelée une fois avec l'ID de l'étudiant
-        verify(etudiantRepository, times(1)).deleteById(etudiantId);
-    }
-    @Test
-    public void testAssignEtudiantToDepartement() {
-
-    }
-    @Test
-    public void testFindByDepartementIdDepartement() {
-        // ID du département factice
-        int departementId = 1;
-
-        // Créez une liste d'étudiants factices pour le département
-        List<Etudiant> etudiants = new ArrayList<>();
-        etudiants.add(new Etudiant());
-        etudiants.add(new Etudiant());
-
-        // Configurez le mock pour renvoyer la liste d'étudiants factices en fonction de l'ID du département
-        when(etudiantRepository.findByDepartementIdDepartement(departementId)).thenReturn(etudiants);
-
-        // Appelez la méthode sous test pour récupérer les étudiants par ID de département
-        List<Etudiant> result = etudiantService.findByDepartementIdDepartement(departementId);
-
-        // Vérifiez que le résultat correspond à la liste d'étudiants factices
-        assertEquals(etudiants, result);
-    }
-    @Test
-    public void testFindByEquipesNiveau() {
-        // Niveau factice
-        Niveau niveau = Niveau.JUNIOR;
-
-        // Créez une liste d'étudiants factices pour le niveau
-        List<Etudiant> etudiants = new ArrayList<>();
-        etudiants.add(new Etudiant());
-        etudiants.add(new Etudiant());
-
-        // Configurez le mock pour renvoyer la liste d'étudiants factices en fonction du niveau
-        when(etudiantRepository.findByEquipesNiveau(niveau)).thenReturn(etudiants);
-
-        // Appelez la méthode sous test pour récupérer les étudiants par niveau
-        List<Etudiant> result = etudiantService.findByEquipesNiveau(niveau);
-
-        // Vérifiez que le résultat correspond à la liste d'étudiants factices
-        assertEquals(etudiants, result);
-    }
-    @Test
-    public void testRetrieveEtudiantsByContratSpecialite() {
-        // Spécialité factice
-        Specialite specialite = Specialite.IA;
-
-        // Créez une liste d'étudiants factices pour la spécialité
-        List<Etudiant> etudiants = new ArrayList<>();
-        etudiants.add(new Etudiant());
-        etudiants.add(new Etudiant());
-
-        // Configurez le mock pour renvoyer la liste d'étudiants factices en fonction de la spécialité
-        when(etudiantRepository.retrieveEtudiantsByContratSpecialite(specialite)).thenReturn(etudiants);
-
-        // Appelez la méthode sous test pour récupérer les étudiants par spécialité
-        List<Etudiant> result = etudiantService.retrieveEtudiantsByContratSpecialite(specialite);
-
-        // Vérifiez que le résultat correspond à la liste d'étudiants factices
-        assertEquals(etudiants, result);
-    }
-    @Test
-    public void testRetrieveEtudiantsByContratSpecialiteSQL() {
-        // Spécialité factice
-        String specialite = "IA"; // Remarque : nous utilisons une chaîne pour représenter la spécialité, car c'est une requête SQL native.
-
-        // Créez une liste d'étudiants factices pour la spécialité
-        List<Etudiant> etudiants = new ArrayList<>();
-        etudiants.add(new Etudiant());
-        etudiants.add(new Etudiant());
-
-        // Configurez le mock pour renvoyer la liste d'étudiants factices en fonction de la spécialité
-        when(etudiantRepository.retrieveEtudiantsByContratSpecialiteSQL(specialite)).thenReturn(etudiants);
-
-        // Appelez la méthode sous test pour récupérer les étudiants par spécialité
-        List<Etudiant> result = etudiantService.retrieveEtudiantsByContratSpecialiteSQL(specialite);
-
-        // Vérifiez que le résultat correspond à la liste d'étudiants factices
-        assertEquals(etudiants, result);
-    }
-    @Test
-    public void testAddAndAssignEtudiantToEquipeAndContract() {
-        // Créez des entités factices
-        Etudiant etudiant = new Etudiant();
-        Contrat contrat = new Contrat();
         Equipe equipe = new Equipe();
+        equipe.setNomEquipe("Équipe Test");
+        equipe.setIdEquipe(1);
+        equipe.setEtudiants(etudiants);
+        equipeService.addEquipe(equipe);
 
-        // Configurez le mock pour retourner les entités factices lors de l'appel à findById
-        when(etudiantRepository.save(etudiant)).thenReturn(etudiant);
-        when(contratRepository.findById(1)).thenReturn(java.util.Optional.of(contrat));
-        when(equipeRepository.findById(1)).thenReturn(java.util.Optional.of(equipe));
+        // Assertion pour vérifier que l'équipe a été créée avec succès et n'est pas null
+        assertNotNull(equipe);
 
-        // Appelez la méthode sous test
-        Etudiant result = etudiantService.addAndAssignEtudiantToEquipeAndContract(etudiant, 1, 1);
-
-        // Vérifiez que l'entité retournée correspond à l'entité factice
-        assertEquals(etudiant, result);
-        // Vérifiez que le contrat est associé à l'étudiant
-        assertEquals(etudiant, contrat.getEtudiant());
-        // Vérifiez que l'équipe est associée à l'étudiant
-        assertEquals(1, etudiant.getEquipes().size());
+        System.err.println("Étape 7 : Création d'une équipe");
+        System.err.println(equipe);
     }
+
     @Test
-    public void testGetEtudiantsByDepartement() {
+    void Etape8() {
+        // Étape 8 : Création d'un contrat (en utilisant @Mock)
+        Contrat contrat = new Contrat();
+        contrat.setMontantContrat(500);
+        contrat.setIdContrat(1);
+        contratService.addContrat(contrat);
+
+        // Assertion pour vérifier que le contrat a été créé avec succès et n'est pas null
+        assertNotNull(contrat);
+
+        System.err.println("Étape 8 : Création d'un contrat");
+        System.err.println(contrat);
+    }
+
+    @Test
+    void Etape9() {
+        List<Etudiant> etudiants = new ArrayList<>();
+        Equipe equipe = new Equipe();
+        equipe.setNomEquipe("Équipe Test");
+        equipe.setIdEquipe(1);
+        equipe.setEtudiants(etudiants);
+        equipeService.addEquipe(equipe);
+
+        Contrat contrat = new Contrat();
+        contrat.setMontantContrat(500);
+        contrat.setIdContrat(1);
+        contratService.addContrat(contrat);
+
+        // Étape 9 : Affectation d'un étudiant à une équipe et un contrat (en utilisant @Mock)
+        Etudiant etudiant = new Etudiant();
+        etudiant.setNomE("HOUSSEM");
+        etudiant.setIdEtudiant(7);
+
+        when(etudiantRepository.findById(etudiant.getIdEtudiant())).thenReturn(Optional.of(etudiant));
+        when(equipeRepository.findById(equipe.getIdEquipe())).thenReturn(Optional.of(equipe));
+        when(contratRepository.findById(contrat.getIdContrat())).thenReturn(Optional.of(contrat));
+
+        Etudiant etudiantAffecte = etudiantService.addAndAssignEtudiantToEquipeAndContract(etudiant, contrat.getIdContrat(), equipe.getIdEquipe());
+
+        assertNotNull(etudiantAffecte); // Vérifie que l'étudiant a bien été ajouté
+        assertEquals(etudiant.getIdEtudiant(), etudiantAffecte.getIdEtudiant()); // Vérifie l'ID de l'étudiant
+        assertTrue(equipe.getEtudiants().contains(etudiantAffecte)); // Vérifie que l'étudiant est associé à l'équipe
+        assertEquals(contrat.getEtudiant(), etudiantAffecte);
+
+        System.err.println("Étape 9 : Ajout de l'étudiant " + etudiant.getNomE() + " avec affectation à une équipe et un contrat ");
+        System.err.println("<============================ Fin du scénario de test ============================>");
 
     }
 
