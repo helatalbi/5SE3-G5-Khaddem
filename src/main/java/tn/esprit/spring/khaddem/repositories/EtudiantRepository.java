@@ -17,33 +17,11 @@ public interface EtudiantRepository extends JpaRepository<Etudiant, Integer> {
     //public List<Etudiant> findByDepartementIdDepartement(Long idDepartement);
     //public List<Etudiant> findByEquipesNiveau(Niveau nv);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     List<Etudiant> findByDepartementIdDepartement(Integer idDepartement);
 
    List<Etudiant> findByEquipesNiveau(Niveau niveau);
 
    Etudiant findByNomEAndPrenomE(String nomE, String prenomE);
-
-
-
-
-
 
     @Query("SELECT e FROM Etudiant e, Contrat c where "
            + "e.idEtudiant = c.etudiant.idEtudiant "

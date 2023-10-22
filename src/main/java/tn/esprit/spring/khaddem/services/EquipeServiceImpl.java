@@ -2,7 +2,6 @@ package tn.esprit.spring.khaddem.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.spring.khaddem.entities.Contrat;
 import tn.esprit.spring.khaddem.entities.Equipe;
@@ -45,6 +44,12 @@ public class EquipeServiceImpl implements IEquipeService{
     @Override
     public Equipe retrieveEquipe(Integer idEquipe) {
         return   equipeRepository.findById(idEquipe).get();
+    }
+
+    @Override
+    public String deleteEquipe(Integer idEquipe) {
+        equipeRepository.deleteById(idEquipe);
+        return "deleted";
     }
 
     public void evoluerEquipes(){

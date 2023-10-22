@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/equipe")
+@CrossOrigin(origins = "*")
 public class EquipeRestController {
     IEquipeService equipeService;
     // http://localhost:8089/Kaddem/equipe/retrieve-all-equipes
@@ -43,6 +44,12 @@ public class EquipeRestController {
     public Equipe updateEtudiant(@RequestBody Equipe e) {
         Equipe equipe= equipeService.updateEquipe(e);
         return equipe;
+    }
+    @PostMapping("/delete/{equipe-id}")
+    @ResponseBody
+    public String deleteEquipe(@PathVariable("equipe-id") Integer equipeId)
+    {
+        return equipeService.deleteEquipe(equipeId);
     }
 
    // @Scheduled(cron="0 0 13 * * *")

@@ -13,6 +13,7 @@ public interface IEquipeService {
     Equipe updateEquipe (Equipe  e);
 
     Equipe retrieveEquipe (Integer idEquipe);
+    String deleteEquipe(Integer idEquipe);
 
     public void evoluerEquipes();
 
