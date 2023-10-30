@@ -23,7 +23,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class) // Assurez-vous que vous utilisez l'extension Mockito
-public class EtudiantServiceTest {
+class EtudiantServiceTest {
     //helaa
     @InjectMocks
     private EtudiantServiceImpl etudiantService;
@@ -152,7 +152,7 @@ public class EtudiantServiceTest {
         etudiantService.removeEtudiant(ajoutEtudiant2.getIdEtudiant());
 
         // Assertion pour vérifier que l'étudiant 2 a bien été supprimé
-       // verify(etudiantRepository, times(1)).delete(ajoutEtudiant2);
+        //verify(etudiantRepository, times(1)).delete(ajoutEtudiant2);
 
         System.err.println("Étape 4 : Suppression de l'étudiant 2 ");
 
