@@ -1,4 +1,4 @@
-version: "2"
+ version: "2"
 services: 
   backend:
     depends_on:
@@ -11,6 +11,7 @@ services:
     container_name: mysql-db
     environment:
       MYSQL_DATABASE: khaddemApp
-      MYSQL_ROOT_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: your_root_password_here
     ports:
       - "3307:3306"
+
