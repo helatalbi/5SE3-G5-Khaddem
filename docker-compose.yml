@@ -11,6 +11,6 @@ services:
     container_name: mysql-db
     environment:
       MYSQL_DATABASE: khaddemApp
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: 
     ports:
       - "3307:3306"
