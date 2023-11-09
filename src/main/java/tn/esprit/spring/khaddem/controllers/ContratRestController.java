@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/contrat")
+@CrossOrigin(value = "*")
 public class ContratRestController {
     @Autowired
     IContratService contratService;
