@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ContratServiceImplTest {
+class ContratServiceImplTest {
 
     @Mock
     private ContratRepository contratRepository;
@@ -36,19 +36,19 @@ public class ContratServiceImplTest {
     private ContratServiceImpl contratService;
 
     @BeforeEach
-    public void setup() {
+     void setup() {
         MockitoAnnotations.initMocks(this);
 
     }
 
     @AfterEach
-    public void cleanup() {
+     void cleanup() {
         etudiantRepository.deleteAll();
         contratRepository.deleteAll();
     }
 
     @Test
-    public void testAddContrat() {
+     void testAddContrat() {
         // Given
         Contrat contrat = new Contrat();
         contrat.setMontantContrat(1000);
@@ -68,7 +68,7 @@ public class ContratServiceImplTest {
     }
 
     @Test
-    public void testUpdateContrat() {
+     void testUpdateContrat() {
         Contrat contrat = new Contrat();
         contrat.setMontantContrat(1500);
         contrat.setIdContrat(1);
@@ -90,7 +90,7 @@ public class ContratServiceImplTest {
 
 
     @Test
-    public void testRetrieveContrat() {
+     void testRetrieveContrat() {
         // Given
         Contrat contrat = new Contrat();
         contrat.setMontantContrat(1000);
@@ -114,7 +114,7 @@ public class ContratServiceImplTest {
     }
 
     @Test
-    public void testRemoveContrat() {
+     void testRemoveContrat() {
         // Given
         Contrat contrat = new Contrat();
         contrat.setMontantContrat(1000);
@@ -134,7 +134,7 @@ public class ContratServiceImplTest {
     }
 
     @Test
-    public void testAddAndAffectContratToEtudiant() {
+     void testAddAndAffectContratToEtudiant() {
         // Given
         Contrat contrat = new Contrat();
         contrat.setMontantContrat(1000);
@@ -160,7 +160,7 @@ public class ContratServiceImplTest {
     }
 
     @Test
-    public void testRetrieveAndUpdateStatusContrat() {
+     void testRetrieveAndUpdateStatusContrat() {
         // Arrange
         List<Contrat> contrats = new ArrayList<>();
         Contrat contrat1 = new Contrat();

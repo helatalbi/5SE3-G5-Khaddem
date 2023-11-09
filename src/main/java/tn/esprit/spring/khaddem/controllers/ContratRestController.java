@@ -1,6 +1,6 @@
 package tn.esprit.spring.khaddem.controllers;
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +10,9 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("/contrat")
 public class ContratRestController {
+    @Autowired
     IContratService contratService;
 
     // http://localhost:8089/Kaddem/contrat/retrieve-all-contrats
