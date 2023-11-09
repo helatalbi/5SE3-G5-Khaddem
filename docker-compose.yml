@@ -1,5 +1,5 @@
 version: "2"
-services: 
+services:
   backend:
     depends_on: [db]
     image: helatalbi/khaddem:1.0
@@ -14,3 +14,4 @@ services:
       MYSQL_PASSWORD: root
     ports:
       - "3307:3306"
+

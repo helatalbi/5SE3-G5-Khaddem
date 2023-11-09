@@ -14,7 +14,7 @@ public interface IUniversiteService {
     Universite retrieveUniversite (Integer idUniversite);
 
 
-    public void assignUniversiteToDepartement(Integer universiteId, Integer departementId) ;
+    void assignUniversiteToDepartement(Integer universiteId, Integer departementId) ;
 
 
 }

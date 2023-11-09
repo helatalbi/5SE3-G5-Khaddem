@@ -2,16 +2,17 @@ package tn.esprit.spring.khaddem.services;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 import tn.esprit.spring.khaddem.entities.Contrat;
 import tn.esprit.spring.khaddem.entities.Etudiant;
-import tn.esprit.spring.khaddem.entities.Specialite;
 import tn.esprit.spring.khaddem.repositories.ContratRepository;
 import tn.esprit.spring.khaddem.repositories.EtudiantRepository;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -19,8 +20,9 @@ import java.util.List;
 public class ContratServiceImpl implements  IContratService{
 
 
-
+@Autowired
     ContratRepository contratRepository;
+@Autowired
     EtudiantRepository etudiantRepository;
 
     @Override
@@ -39,21 +41,22 @@ public class ContratServiceImpl implements  IContratService{
     @Override
     public Contrat retrieveContrat(Integer idContrat) {
         log.info("debut methode retrieveContrat");
-        return contratRepository.findById(idContrat).get();
+        Optional<Contrat> optionalContrat = contratRepository.findById(idContrat);
+        if (optionalContrat.isPresent()) {
+            return optionalContrat.get();
+        } else {
+            // Handle the case when the Contrat with the given id is not found
+            throw new NotFoundException("Contrat not found with id: " + idContrat);
+        }
     }
 
-    @Override
-    public void removeContrat(Integer idContrat) {
-        log.info("debut methode removeContrat");
-        contratRepository.deleteById(idContrat);
-    }
+
 
     @Override
     public Contrat addContrat(Contrat c) {
        // start date t1
         contratRepository.save(c);
 
-        // te =t2-t1;
         return c;
     }
 
@@ -65,11 +68,11 @@ public class ContratServiceImpl implements  IContratService{
         Etudiant etudiant=etudiantRepository.findByNomEAndPrenomE(nomE,prenomE);
         log.info("etudiant: "+etudiant.getNomE()+" "+etudiant.getPrenomE());
         // nb contrats actifs
-        Integer nbContratsActifs= etudiant.getContrats().size();
+        int nbContratsActifs= etudiant.getContrats().size();
         if(nbContratsActifs>5) {
             log.info("nombre de contrats autorisés est atteint");
             Long endDate = new Date().getTime();
-            Long executionTime = endDate-startDate;
+            long executionTime = endDate-startDate;
             log.info("endDate: "+startDate);
             log.info("executionTime: "+executionTime+ " ms");
             return ce;
@@ -79,7 +82,7 @@ public class ContratServiceImpl implements  IContratService{
         ce.setEtudiant(etudiant);
         log.info("fin methode addAndAffectContratToEtudiant");
         Long endDate = new Date().getTime();
-        Long executionTime = endDate-startDate;
+        long executionTime = endDate-startDate;
 
         log.info("endDate: "+startDate);
         log.info("executionTime: "+executionTime+ " ms");
@@ -103,18 +106,17 @@ public class ContratServiceImpl implements  IContratService{
 
             Date dateSysteme = new Date();
 
-            if (contrat.getArchived()==null || contrat.getArchived()==false) {
-                long difference_In_Time = contrat.getDateFinContrat().getTime()-dateSysteme.getTime();
-                long difference_In_Days = (difference_In_Time / (1000 * 60 * 60 * 24)) % 365;
+            if (contrat.getArchived() == null || !contrat.getArchived()) {
+                long differenceInTime = contrat.getDateFinContrat().getTime()-dateSysteme.getTime();
+                long differenceInDays = (differenceInTime / (1000 * 60 * 60 * 24)) % 365;
                 // il est préférable d'utiliser des méthodes prédéfinis de comparaison
-               log.info("difference in days : "+difference_In_Days);
-             //     if (difference_In_Days>=0 && difference_In_Days<=15){  // entre 0 et  15 jours exactement
-                    if (difference_In_Days==15){  // pour 15 jours exactement
+               log.info("difference in days : "+differenceInDays);
+                    if (differenceInDays==15){  // pour 15 jours exactement
                     log.info(" Contrat Commencant le : " + contrat.getDateDebutContrat()+"pour l'etudiant "+contrat.getEtudiant().getNomE()+
                             " "+contrat.getEtudiant().getPrenomE()+"  va bientot s achever le "
                     +contrat.getDateFinContrat());
                 }
-                if (difference_In_Days==0) {
+                if (differenceInDays==0) {
                     log.info("jour j: " + contrat.getIdContrat());
                     contrat.setArchived(true);
                     contratRepository.save(contrat);
@@ -124,46 +126,48 @@ public class ContratServiceImpl implements  IContratService{
             log.info("debut methode retrieveAndUpdateStatusContrat");
         }
     }
-    public float getChiffreAffaireEntreDeuxDates(Date startDate, Date endDate){
-        float difference_In_Time = endDate.getTime() - startDate.getTime();
-        float difference_In_Days = (difference_In_Time / (1000 * 60 * 60 * 24)) % 365;
-        float difference_In_months =difference_In_Days/30;
-        List<Contrat> contrats=contratRepository.findAll();
-        float chiffreAffaireEntreDeuxDates=0;
-        float chiffreAffaireEntreDeuxDatesIA=0;
-        float chiffreAffaireEntreDeuxDatesCloud=0;
-        float chiffreAffaireEntreDeuxDatesReseau=0;
-        float chiffreAffaireEntreDeuxDatesSecurite=0;
+    public float getChiffreAffaireEntreDeuxDates(Date startDate, Date endDate) {
+        long differenceInTime = endDate.getTime() - startDate.getTime();
+        float differenceInDays = (float) differenceInTime / (1000 * 60 * 60 * 24);
+        float differenceInMonths = differenceInDays / 30;
+
+        List<Contrat> contrats = contratRepository.findAll();
+
+        float chiffreAffaireEntreDeuxDates = 0;
+        float chiffreAffaireEntreDeuxDatesIA = 0;
+        float chiffreAffaireEntreDeuxDatesCloud = 0;
+        float chiffreAffaireEntreDeuxDatesReseau = 0;
+        float chiffreAffaireEntreDeuxDatesSecurite = 0;
 
         for (Contrat contrat : contrats) {
-            if (contrat.getSpecialite()== Specialite.IA){
-                chiffreAffaireEntreDeuxDates+=(difference_In_months*contrat.getMontantContrat());
-                chiffreAffaireEntreDeuxDatesIA+=(difference_In_months*contrat.getMontantContrat());
+            float monthlyRevenue = differenceInMonths * contrat.getMontantContrat();
 
-            } else if (contrat.getSpecialite()== Specialite.CLOUD) {
-                chiffreAffaireEntreDeuxDates+=(difference_In_months*contrat.getMontantContrat());
-                chiffreAffaireEntreDeuxDatesCloud+=(difference_In_months*contrat.getMontantContrat());
+            switch (contrat.getSpecialite()) {
+                case IA:
+                    chiffreAffaireEntreDeuxDatesIA += monthlyRevenue;
+                    break;
+                case CLOUD:
+                    chiffreAffaireEntreDeuxDatesCloud += monthlyRevenue;
+                    break;
+                case RESEAU:
+                    chiffreAffaireEntreDeuxDatesReseau += monthlyRevenue;
+                    break;
+                case SECURITE:
+                    chiffreAffaireEntreDeuxDatesSecurite += monthlyRevenue;
+                    break;
             }
-            else if (contrat.getSpecialite()== Specialite.RESEAU) {
-                chiffreAffaireEntreDeuxDates+=(difference_In_months*contrat.getMontantContrat());
-                chiffreAffaireEntreDeuxDatesReseau+=(difference_In_months*contrat.getMontantContrat());
 
-            }
-            else if (contrat.getSpecialite()== Specialite.SECURITE)
-            {
-                chiffreAffaireEntreDeuxDates+=(difference_In_months*contrat.getMontantContrat());
-                chiffreAffaireEntreDeuxDatesSecurite+=(difference_In_months*contrat.getMontantContrat());
-
-            }
+            chiffreAffaireEntreDeuxDates += monthlyRevenue;
         }
-        log.info("chiffreAffaireEntreDeuxDates: "+chiffreAffaireEntreDeuxDates);
-        log.info("chiffreAffaireEntreDeuxDatesIA:" +chiffreAffaireEntreDeuxDatesIA);
-        log.info("chiffreAffaireEntreDeuxDatesCloud "+chiffreAffaireEntreDeuxDatesCloud);
-        log.info("chiffreAffaireEntreDeuxDatesReseau "+chiffreAffaireEntreDeuxDatesReseau);
-        log.info("chiffreAffaireEntreDeuxDatesSecurite "+chiffreAffaireEntreDeuxDatesSecurite);
+
+        log.info("chiffreAffaireEntreDeuxDates: " + chiffreAffaireEntreDeuxDates);
+        log.info("chiffreAffaireEntreDeuxDatesIA: " + chiffreAffaireEntreDeuxDatesIA);
+        log.info("chiffreAffaireEntreDeuxDatesCloud: " + chiffreAffaireEntreDeuxDatesCloud);
+        log.info("chiffreAffaireEntreDeuxDatesReseau: " + chiffreAffaireEntreDeuxDatesReseau);
+        log.info("chiffreAffaireEntreDeuxDatesSecurite: " + chiffreAffaireEntreDeuxDatesSecurite);
+
         return chiffreAffaireEntreDeuxDates;
-
-
     }
+
 
 }

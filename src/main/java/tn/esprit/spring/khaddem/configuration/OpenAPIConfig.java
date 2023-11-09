@@ -13,13 +13,11 @@ public class OpenAPIConfig {
         return new OpenAPI().info(infoAPI());
     }
 
-    public Info infoAPI() {
+    private Info infoAPI() {
         return new Info().title("SpringDoc-Demo").description("TP étude de cas").contact(contactAPI());
     }
 
-    public Contact contactAPI() {
-        Contact contact = new Contact().name("Ghassen Hammouda").email("ghassen.hammouda@esprit.tn").url("https://www.linkedin.com/in/ghassen-hammouda-97859996/");
-        return contact;
+    private Contact contactAPI() {
+        return new Contact().name("Ghassen Hammouda").email("ghassen.hammouda@esprit.tn").url("https://www.linkedin.com/in/ghassen-hammouda-97859996/");
     }
 }
-

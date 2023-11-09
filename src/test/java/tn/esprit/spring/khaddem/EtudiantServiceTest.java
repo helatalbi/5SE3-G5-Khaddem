@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import tn.esprit.spring.khaddem.entities.*;
 import tn.esprit.spring.khaddem.repositories.ContratRepository;
 import tn.esprit.spring.khaddem.repositories.DepartementRepository;
@@ -251,9 +250,9 @@ class EtudiantServiceTest {
 
         // Étape 9 : Affectation d'un étudiant à une équipe et un contrat (en utilisant @Mock)
         Etudiant etudiant = new Etudiant();
-        etudiant.setNomE("HOUSSEM");
+        etudiant.setNomE("Hela");
         etudiant.setIdEtudiant(7);
-
+etudiantRepository.save(etudiant);
 //        when(etudiantRepository.findById(etudiant.getIdEtudiant())).thenReturn(Optional.of(etudiant));
         when(equipeRepository.findById(equipe.getIdEquipe())).thenReturn(Optional.of(equipe));
         when(contratRepository.findById(contrat.getIdContrat())).thenReturn(Optional.of(contrat));
