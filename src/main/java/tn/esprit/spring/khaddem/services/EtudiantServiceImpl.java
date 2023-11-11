@@ -10,7 +10,6 @@ import tn.esprit.spring.khaddem.repositories.DepartementRepository;
 import tn.esprit.spring.khaddem.repositories.EquipeRepository;
 import tn.esprit.spring.khaddem.repositories.EtudiantRepository;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -96,15 +95,23 @@ public class EtudiantServiceImpl implements IEtudiantService{
 
     @Transactional
     public Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe){
-        Contrat c=contratRepository.findById(idContrat).orElse(null);
-        Equipe eq=equipeRepository.findById(idEquipe).orElse(null);
-        c.setEtudiant(e);
-        eq.getEtudiants().add(e);
-        equipeRepository.save(eq);
-        contratRepository.save(c);
+        Contrat c = contratRepository.findById(idContrat).orElse(null);
+        Equipe eq = equipeRepository.findById(idEquipe).orElse(null);
+
+        if (c != null) {
+            c.setEtudiant(e);
+            contratRepository.save(c);
+        }
+
+        if (eq != null) {
+            eq.getEtudiants().add(e);
+            equipeRepository.save(eq);
+        }
+
         etudiantRepository.save(e);
         return e;
     }
+
 
     @Override
     public List<Etudiant> getEtudiantsByDepartement(Integer idDepartement) {

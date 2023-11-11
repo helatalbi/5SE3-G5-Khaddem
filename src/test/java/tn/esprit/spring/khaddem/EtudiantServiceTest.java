@@ -139,22 +139,32 @@ class EtudiantServiceTest {
 
     @Test
     void Etape4() {
+        // Create an instance of the Etudiant class
         Etudiant etudiant2 = new Etudiant();
         etudiant2.setNomE("Étudiant 2");
         etudiant2.setIdEtudiant(2);
+
+        // Mock the behavior of etudiantRepository.save() method
         when(etudiantRepository.save(etudiant2)).thenReturn(etudiant2);
+
+        // Call the addEtudiant method and capture the result
         Etudiant ajoutEtudiant2 = etudiantService.addEtudiant(etudiant2);
 
-        // Étape 4 : Suppression de l'étudiant 2 (en utilisant @Mock)
-   //       when(etudiantRepository.findById(ajoutEtudiant2.getIdEtudiant())).thenReturn(Optional.of(ajoutEtudiant2));
-  //      doNothing().when(etudiantRepository).delete(ajoutEtudiant2);
+        // Verify that etudiantRepository.save() was called with the correct argument
+        verify(etudiantRepository).save(etudiant2);
+
+        // Call the removeEtudiant method
         etudiantService.removeEtudiant(ajoutEtudiant2.getIdEtudiant());
 
-        // Assertion pour vérifier que l'étudiant 2 a bien été supprimé
-        //verify(etudiantRepository, times(1)).delete(ajoutEtudiant2);
+        // Verify that etudiantRepository.delete() was called with the correct argument
+        verify(etudiantRepository).deleteById(ajoutEtudiant2.getIdEtudiant());
 
+        // Add assertions to verify the expected behavior
+        assertEquals("Étudiant 2", ajoutEtudiant2.getNomE());
+        // Add more assertions as needed
+
+        // Print a message indicating the completion of the test step
         System.err.println("Étape 4 : Suppression de l'étudiant 2 ");
-
     }
 
     @Test
