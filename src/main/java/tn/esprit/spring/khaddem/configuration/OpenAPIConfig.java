@@ -16,7 +16,7 @@ public class OpenAPIConfig {
     public Info infoAPI() {
         return new Info().title("SpringDoc-Demo").description("TP étude de cas").contact(contactAPI());
     }
-
+//hello
     public Contact contactAPI() {
         Contact contact = new Contact().name("Ghassen Hammouda").email("ghassen.hammouda@esprit.tn").url("https://www.linkedin.com/in/ghassen-hammouda-97859996/");
         return contact;
