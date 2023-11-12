@@ -31,38 +31,26 @@ class DepartementServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        // Initialize mock data or configuration if needed
+        
     }
 
     @Test
     void retrieveAllDepartements() {
-        // Create a sample list of departments for testing
+        
         List<Departement> departments = new ArrayList<>();
         departments.add(new Departement());
-
-        // Mock the behavior of the repository
         Mockito.when(departementRepository.findAll()).thenReturn(departments);
-
-        // Call the service method
-        List<Departement> retrievedDepartments = departementService.retrieveAllDepartements();
-
-        // Assertions to verify the results
+        List<Departement> retrievedDepartments = departementService.retrieveAllDepartements();   
         Assertions.assertEquals(1, retrievedDepartments.size());
         Assertions.assertEquals(departments.get(0), retrievedDepartments.get(0));
     }
 
     @Test
     void addDepartement() {
-        // Create a sample department for testing
-        Departement department = new Departement();
-
-        // Mock the behavior of the repository
+        
+        Departement department = new Departement();        
         Mockito.when(departementRepository.save(Mockito.any())).thenReturn(department);
-
-        // Call the service method
-        Departement addedDepartment = departementService.addDepartement(department);
-
-        // Assertions to verify the results
+        Departement addedDepartment = departementService.addDepartement(department);      
         Assertions.assertNotNull(addedDepartment);
         Assertions.assertEquals(department, addedDepartment);
     }
