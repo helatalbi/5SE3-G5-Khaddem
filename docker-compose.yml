@@ -6,7 +6,9 @@ services:
     ports:
       - "9010:9000"
       - "9011:9092"
-   nexus:
+
+  nexus:
     image: sonatype/nexus3:latest
     ports:
       - "8011:8081"
+
