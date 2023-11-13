@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <distributionManagement>
+        <repository>
+            <id>khaddem-back-jar</id>
+            <url>http://192.168.1.17:8081/repository/khaddem-back-jar/</url>
+        </repository>
+    </distributionManagement>
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -9,7 +15,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>tn.esprit.spring</groupId>
-    <artifactId>khaddem</artifactId>
+    <artifactId>5SE-G4-khaddem</artifactId>
     <version>4.0</version>
     <name>khaddem</name>
     <description>khaddem</description>
@@ -87,6 +93,25 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.8</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
