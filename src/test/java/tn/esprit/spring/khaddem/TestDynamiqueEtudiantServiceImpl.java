@@ -1,30 +1,33 @@
 package tn.esprit.spring.khaddem;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import tn.esprit.spring.khaddem.entities.Contrat;
-import tn.esprit.spring.khaddem.entities.Departement;
-import tn.esprit.spring.khaddem.entities.Equipe;
-import tn.esprit.spring.khaddem.entities.Etudiant;
-import tn.esprit.spring.khaddem.repositories.ContratRepository;
-import tn.esprit.spring.khaddem.repositories.EquipeRepository;
-import tn.esprit.spring.khaddem.repositories.EtudiantRepository;
-import tn.esprit.spring.khaddem.services.ContratServiceImpl;
-import tn.esprit.spring.khaddem.services.DepartementServiceImpl;
-import tn.esprit.spring.khaddem.services.EquipeServiceImpl;
-import tn.esprit.spring.khaddem.services.EtudiantServiceImpl;
-
-import java.util.*;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
-@Slf4j
+//import lombok.extern.slf4j.Slf4j;
+//import org.junit.jupiter.api.AfterEach;
+//import org.junit.jupiter.api.BeforeEach;
+//import org.junit.jupiter.api.DynamicTest;
+//import org.junit.jupiter.api.TestFactory;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.test.context.SpringBootTest;
+//import org.springframework.dao.EmptyResultDataAccessException;
+//import tn.esprit.spring.khaddem.entities.Contrat;
+//import tn.esprit.spring.khaddem.entities.Departement;
+//import tn.esprit.spring.khaddem.entities.Equipe;
+//import tn.esprit.spring.khaddem.entities.Etudiant;
+//import tn.esprit.spring.khaddem.repositories.ContratRepository;
+//import tn.esprit.spring.khaddem.repositories.EquipeRepository;
+//import tn.esprit.spring.khaddem.repositories.EtudiantRepository;
+//import tn.esprit.spring.khaddem.services.ContratServiceImpl;
+//import tn.esprit.spring.khaddem.services.DepartementServiceImpl;
+//import tn.esprit.spring.khaddem.services.EquipeServiceImpl;
+//import tn.esprit.spring.khaddem.services.EtudiantServiceImpl;
+//
+//import javax.transaction.Transactional;
+//import java.util.*;
+//import java.util.stream.Stream;
+//
+//import static org.junit.jupiter.api.Assertions.*;
+//@Slf4j
 //@SpringBootTest
+//@Transactional
 class TestDynamiqueEtudiantServiceImpl {
 //    @Autowired
 //    private EtudiantServiceImpl etudiantService;
@@ -47,11 +50,11 @@ class TestDynamiqueEtudiantServiceImpl {
 //    @Autowired
 //    private EquipeRepository equipeRepository;
 //
-//    @BeforeEach
-//    public void setup() {
-//
-//    }
-//
+////    @BeforeEach
+////    public void setup() {
+////
+////    }
+////
 //    @AfterEach
 //    public void cleanup() {}
 //
@@ -84,23 +87,26 @@ class TestDynamiqueEtudiantServiceImpl {
 //        }));
 //
 //
-//        dynamicTests.add(DynamicTest.dynamicTest("Étape 3 : Afficher l'étudiant 1", () -> {
-//            Optional<Etudiant> optionalEtudiant1 = retrieveEtudiant(1);
-//
-//            assertTrue(optionalEtudiant1.isPresent());
-//            Etudiant etudiant1 = optionalEtudiant1.get();
-//
-//            assertNotNull(etudiant1);
-//            assertEquals("Nouveau Nom Étudiant 1", etudiant1.getNomE());
-//
-//            System.err.println("Etudiant récupéré correctement:\n"+etudiant1.getNomE());
-//        }));
-//
-//        dynamicTests.add(DynamicTest.dynamicTest("Étape 4 : Suppression de l'étudiant 2", () -> {
-//            removeEtudiant(2);
-//
-//            System.err.println("Etudiant avec id=2 supprrimé correctement");
-//        }));
+////        dynamicTests.add(DynamicTest.dynamicTest("Étape 3 : Afficher l'étudiant 1", () -> {
+////            Optional<Etudiant> optionalEtudiant1 = retrieveEtudiant(1);
+////
+////            assertTrue(optionalEtudiant1.isPresent());
+////            Etudiant etudiant1 = optionalEtudiant1.get();
+////
+////            assertNotNull(etudiant1);
+////            assertEquals("Nouveau Nom Étudiant 1", etudiant1.getNomE());
+////
+////            System.err.println("Etudiant récupéré correctement:\n"+etudiant1);
+////        }));
+////
+////        dynamicTests.add(DynamicTest.dynamicTest("Étape 4 : Suppression de l'étudiant 2", () -> {
+////            try {
+////                removeEtudiant(2);
+////                System.err.println("Étudiant avec id=2 supprimé correctement");
+////            } catch (EmptyResultDataAccessException e) {
+////                fail("Étudiant avec id=2 non trouvé");
+////            }
+////        }));
 //
 //
 //        dynamicTests.add(DynamicTest.dynamicTest("Étape 5 : Création d'un département", () -> {
@@ -119,11 +125,11 @@ class TestDynamiqueEtudiantServiceImpl {
 //
 //        dynamicTests.add(DynamicTest.dynamicTest("Étape 7 : Création d'une équipe", () -> {
 //            // Étape 7 : Création d'une équipe
-//            List<Etudiant> etudiants1 = new ArrayList<>();
+//            Set<Etudiant> etudiants1 = new HashSet<>();
 //            Equipe equipe = new Equipe();
 //            equipe.setNomEquipe("Équipe Test");
 //            equipe.setIdEquipe(1);
-//            equipe.setEtudiants(etudiants1);
+//           // equipe.setEtudiants(etudiants1);
 //            equipeService.addEquipe(equipe);
 //
 //            // Assurez-vous que l'équipe a été créée avec succès et n'est pas null
@@ -146,28 +152,28 @@ class TestDynamiqueEtudiantServiceImpl {
 //            System.err.println("Contrat crée avec succès\n"+contrat);
 //        }));
 //
-//        dynamicTests.add(DynamicTest.dynamicTest("Étape 9 : Affectation d'un nouvel étudiant à une équipe et un contrat", () -> {
-//            // Étape 9 : Affectation d'un nouvel étudiant à une équipe et un contrat
-//            Etudiant nouvelEtudiant = new Etudiant();
-//            nouvelEtudiant.setNomE("Nouvel Étudiant");
-//            nouvelEtudiant.setIdEtudiant(4); // Assurez-vous d'utiliser un ID unique
-//
-//            // Ajoutez d'abord l'étudiant à la base de données
-//            etudiantService.addEtudiant(nouvelEtudiant);
-//
-//            // Ensuite, affectez l'étudiant à une équipe et un contrat
-//            etudiantService.addAndAssignEtudiantToEquipeAndContract(nouvelEtudiant, 1, 1);
-//
-//            // Assurez-vous que le nouvel étudiant a été affecté à l'équipe et au contrat
-//            Optional<Equipe> equipeAffectee = equipeRepository.findById(1); // Remplacez par l'ID correct de l'équipe
-//            Optional<Contrat> contratAffecte = contratRepository.findById(1); // Remplacez par l'ID correct du contrat
-//            Optional<Etudiant> nouvelEtudiantAffecte = etudiantRepository.findById(nouvelEtudiant.getIdEtudiant());
-//            assertNotNull(equipeAffectee);
-//            assertNotNull(contratAffecte);
-//            assertNotNull(nouvelEtudiantAffecte);
-//
-//            System.err.println("Affectation de l'étudiant:\n"+nouvelEtudiant+"\n au contrat avec id=1 et a équipe avec id=1 a été effectuée avec succès!");
-//        }));
+////        dynamicTests.add(DynamicTest.dynamicTest("Étape 9 : Affectation d'un nouvel étudiant à une équipe et un contrat", () -> {
+////            // Étape 9 : Affectation d'un nouvel étudiant à une équipe et un contrat
+////            Etudiant nouvelEtudiant = new Etudiant();
+////            nouvelEtudiant.setNomE("Nouvel Étudiant");
+////            nouvelEtudiant.setIdEtudiant(4); // Assurez-vous d'utiliser un ID unique
+////
+////            // Ajoutez d'abord l'étudiant à la base de données
+////            etudiantService.addEtudiant(nouvelEtudiant);
+////
+////            // Ensuite, affectez l'étudiant à une équipe et un contrat
+////            etudiantService.addAndAssignEtudiantToEquipeAndContract(nouvelEtudiant, 1, 1);
+////
+////            // Assurez-vous que le nouvel étudiant a été affecté à l'équipe et au contrat
+////            Optional<Equipe> equipeAffectee = equipeRepository.findById(1); // Remplacez par l'ID correct de l'équipe
+////            Optional<Contrat> contratAffecte = contratRepository.findById(1); // Remplacez par l'ID correct du contrat
+////            Optional<Etudiant> nouvelEtudiantAffecte = etudiantRepository.findById(nouvelEtudiant.getIdEtudiant());
+////            assertNotNull(equipeAffectee);
+////            assertNotNull(contratAffecte);
+////            assertNotNull(nouvelEtudiantAffecte);
+////
+////            System.err.println("Affectation de l'étudiant:\n"+nouvelEtudiant+"\n au contrat avec id=1 et a équipe avec id=1 a été effectuée avec succès!");
+////        }));
 //
 //
 //
@@ -209,6 +215,6 @@ class TestDynamiqueEtudiantServiceImpl {
 //    private void assignEtudiantToDepartement(int etudiantId, int departementId) {
 //        etudiantService.assignEtudiantToDepartement(etudiantId, departementId);
 //    }
-
+//
 
 }

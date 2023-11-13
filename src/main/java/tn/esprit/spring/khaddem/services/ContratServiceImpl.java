@@ -49,6 +49,11 @@ public class ContratServiceImpl implements  IContratService{
             throw new NotFoundException("Contrat not found with id: " + idContrat);
         }
     }
+    @Override
+    public void removeContrat(Integer idContrat) {
+        log.info("debut methode removeContrat");
+        contratRepository.deleteById(idContrat);
+    }
 
 
 

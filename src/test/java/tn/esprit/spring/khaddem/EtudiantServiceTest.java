@@ -139,15 +139,33 @@ class EtudiantServiceTest {
 
     @Test
     void Etape4() {
+        // Create an Etudiant
         Etudiant etudiant2 = new Etudiant();
         etudiant2.setNomE("Étudiant 2");
         etudiant2.setIdEtudiant(2);
-        when(etudiantRepository.save(etudiant2)).thenReturn(etudiant2);
-        Etudiant ajoutEtudiant2 = etudiantService.addEtudiant(etudiant2);
-        etudiantService.removeEtudiant(ajoutEtudiant2.getIdEtudiant());
-        System.err.println("Étape 4 : Suppression de l'étudiant 2 ");
 
+        // Mock the save operation to return the same etudiant2
+        when(etudiantRepository.save(etudiant2)).thenReturn(etudiant2);
+
+        // Add the Etudiant
+        Etudiant ajoutEtudiant2 = etudiantService.addEtudiant(etudiant2);
+
+        // Verify that the Etudiant was added
+        verify(etudiantRepository, times(1)).save(etudiant2);
+
+        // Remove the Etudiant
+        etudiantService.removeEtudiant(ajoutEtudiant2.getIdEtudiant());
+
+        // Verify that the Etudiant was removed
+        verify(etudiantRepository, times(1)).deleteById(ajoutEtudiant2.getIdEtudiant());
+
+        // You can also assert additional conditions or use assertions library like JUnit assertions
+        // For example, you can assert that the returned Etudiant after removal is the same as the added one
+        assertEquals(etudiant2, ajoutEtudiant2);
+
+        System.err.println("Étape 4 : Suppression de l'étudiant 2 ");
     }
+
 
     @Test
     void Etape5() {

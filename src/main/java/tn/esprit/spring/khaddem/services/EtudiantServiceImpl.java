@@ -94,14 +94,23 @@ public class EtudiantServiceImpl implements IEtudiantService{
     }
 
     @Transactional
-    public Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe){
-        Contrat c=contratRepository.findById(idContrat).orElse(null);
-        Equipe eq=equipeRepository.findById(idEquipe).orElse(null);
+    public Etudiant addAndAssignEtudiantToEquipeAndContract(Etudiant e, Integer idContrat, Integer idEquipe) {
+        Contrat c = contratRepository.findById(idContrat).orElse(null);
+        Equipe eq = equipeRepository.findById(idEquipe).orElse(null);
+
+        // Check if either c or eq is null before proceeding
+        if (c == null || eq == null) {
+            // Handle the null case, throw an exception, log a message, or take appropriate action
+            throw new IllegalArgumentException("Contrat or Equipe not found");
+        }
+
         c.setEtudiant(e);
         eq.getEtudiants().add(e);
+
         equipeRepository.save(eq);
         contratRepository.save(c);
         etudiantRepository.save(e);
+
         return e;
     }
 
