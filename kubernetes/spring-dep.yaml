@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: khaddem-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: khaddem-backend
+  template:
+    metadata:
+      labels:
+        app: khaddem-backend
+    spec:
+      containers:
+        - name: khaddem-backend
+          image: fedilabidi13/fedilabidi-5se3-g5-khaddem-back:latest
+          ports:
+            - containerPort: 8089
+          env:
+            - name: DB_HOST
+              value: mysql-service # Replace with your MySQL service name
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_USER
+              value: root
+            - name: DB_PASSWORD
+              value: ""
