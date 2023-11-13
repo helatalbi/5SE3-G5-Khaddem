@@ -1,14 +1,17 @@
-version: '1'
-
+version: "2"
 services:
-  sonarqube:
-    image: sonarqube:latest
+  backend:
+    depends_on:
+      - db
+    image: dhokkarmed/mohameddhokkar-5se3-g5-khaddem:1.0
     ports:
-      - "9010:9000"
-      - "9011:9092"
+      - "8089:8089"
 
-  nexus:
-    image: sonatype/nexus3:latest
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_DATABASE: khaddemApp
+      MYSQL_ROOT_PASSWORD: admin
     ports:
-      - "8011:8081"
-
+      - "3307:3306"
