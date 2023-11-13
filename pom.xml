@@ -15,7 +15,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>tn.esprit.spring</groupId>
-    <artifactId>5SE-G4-khaddem</artifactId>
+    <artifactId>5SE3-G5-khaddem</artifactId>
     <version>4.0</version>
     <name>khaddem</name>
     <description>khaddem</description>
