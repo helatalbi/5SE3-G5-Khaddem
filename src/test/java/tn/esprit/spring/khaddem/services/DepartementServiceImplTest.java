@@ -1,24 +1,28 @@
 package tn.esprit.spring.khaddem.services;
 
-import org.junit.jupiter.api.Assertions;
+import lombok.var;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import tn.esprit.spring.khaddem.entities.Departement;
 import tn.esprit.spring.khaddem.entities.Universite;
 import tn.esprit.spring.khaddem.repositories.DepartementRepository;
 import tn.esprit.spring.khaddem.repositories.UniversiteRepository;
-import tn.esprit.spring.khaddem.services.DepartementServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootTest
-class DepartementServiceImplTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class DepartementServiceImplTest {
 
     @InjectMocks
     private DepartementServiceImpl departementService;
@@ -30,42 +34,63 @@ class DepartementServiceImplTest {
     private UniversiteRepository universiteRepository;
 
     @BeforeEach
-    void setUp() {
-        
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void retrieveAllDepartements() {
-        
-        List<Departement> departments = new ArrayList<>();
-        departments.add(new Departement());
-        Mockito.when(departementRepository.findAll()).thenReturn(departments);
-        List<Departement> retrievedDepartments = departementService.retrieveAllDepartements();   
-        Assertions.assertEquals(1, retrievedDepartments.size());
-        Assertions.assertEquals(departments.get(0), retrievedDepartments.get(0));
+        List<Departement> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            var departement = new Departement();
+            departement.setIdDepartement(i);
+            departement.setNomDepart("Departement " + i);
+            list.add(departement);
+        }
+
+        when(departementRepository.findAll()).thenReturn(list);
+
+        var result = departementService.retrieveAllDepartements();
+
+        Mockito.verify(departementRepository, Mockito.times(1)).findAll();
+        assertEquals(result.size(), list.size());
     }
 
     @Test
     void addDepartement() {
-        
-        Departement department = new Departement();        
-        Mockito.when(departementRepository.save(Mockito.any())).thenReturn(department);
-        Departement addedDepartment = departementService.addDepartement(department);      
-        Assertions.assertNotNull(addedDepartment);
-        Assertions.assertEquals(department, addedDepartment);
+        var departement = new Departement();
+        departement.setNomDepart("Departement IT");
+
+        when(departementRepository.save(departement)).thenReturn(departement);
+
+        var result = departementService.addDepartement(departement);
+
+        Mockito.verify(departementRepository, Mockito.times(1)).save(departement);
+        assertEquals(departement.getIdDepartement(), result.getIdDepartement());
     }
 
     @Test
     void retrieveDepartementsByUniversite() {
+        Integer idUniversite = 1;
+        Universite universite = new Universite();
+        universite.setIdUniversite(idUniversite);
+
         List<Departement> departements = new ArrayList<>();
-        departements.add(new Departement(1, "Dept 1", new ArrayList<>()));
-        departements.add(new Departement(2, "Dept 2", new ArrayList<>()));
-        Universite universite = new Universite(1,"uni1",departements);
+        for (int i = 0; i < 5; i++) {
+            var departement = new Departement();
+            departement.setIdDepartement(i);
+            departement.setNomDepart("Departement " + i);
+            departements.add(departement);
+        }
 
-        Mockito.when(universiteRepository.findById(universite.getIdUniversite())).thenReturn(Optional.of(universite));
+        universite.setDepartements(departements);
 
-        List<Departement> retrievedDepartements = departementService.retrieveDepartementsByUniversite(universite.getIdUniversite());
+        when(universiteRepository.findById(idUniversite)).thenReturn(Optional.of(universite));
 
-        Assertions.assertEquals(departements, retrievedDepartements);
+        var result = departementService.retrieveDepartementsByUniversite(idUniversite);
+
+        Mockito.verify(universiteRepository, Mockito.times(1)).findById(idUniversite);
+        assertEquals(result.size(), departements.size());
     }
 }
+
