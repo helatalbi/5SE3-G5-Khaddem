@@ -48,24 +48,13 @@ public class DepartementServiceImplTest {
 
     @Test
     void retrieveDepartement() {
-        // Sample Departement ID for testing
         Integer idDepart = 1;
-
-        // Create a sample Departement
         var departement = new Departement();
         departement.setIdDepartement(idDepart);
         departement.setNomDepart("Mathematics");
-
-        // Mock the repository findById method
         when(departementRepository.findById(idDepart)).thenReturn(Optional.of(departement));
-
-        // Call the service method
         var result = departementService.retrieveDepartement(idDepart);
-
-        // Verify that the repository findById method was called once with the correct ID
         Mockito.verify(departementRepository, Mockito.times(1)).findById(idDepart);
-
-        // Assert that the result is the same as the sample Departement
         assertEquals(departement, result);
 
     }
