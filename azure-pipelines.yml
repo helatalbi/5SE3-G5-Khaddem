@@ -1,0 +1,77 @@
+name: 
+parameters:
+  - name: url
+    displayName: 'Provide URL details'
+    type: string
+    default: 'null'
+   
+trigger:
+  - FediLaabidi-5SE3-G5
+
+pr: none
+
+variables:
+  - name: MAVEN_CACHE_FOLDER
+    value: $(HOME)/.m2/repository
+  - name: MAVEN_OPTS
+    value: -Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)
+  - name: npm_config_cache 
+    value: $(HOME)/.npm
+  - name: isFediLaabidi
+    value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/FediLaabidi-5SE3-G5') }}
+  - name: setUrl
+    value: ${{ if eq(parameters.url, 'null') }}$(defaultBranchUrl){{ else }}${{ parameters.url }}{{ end }}
+  - name: JACOCO_CODECOVERAGE
+    value: $(System.DefaultWorkingDirectory)/core/target/site/jacoco/jacoco.xml
+
+stages:
+  - stage: Build
+    displayName: Build Stage for FediLaabidi-5SE3-G5
+    jobs:
+      - job: BuildJob
+        displayName: FediLaabidi-5SE3-G5 Build Job
+        pool:
+         vmImage: ubuntu-latest
+        steps:
+         - checkout: self
+           persistCredentials: true
+           clean: true
+           fetchDepth: 0 
+  # Set up maven repo cache
+         - task: Cache@2
+           displayName: Cache Maven local repo
+           inputs:
+             key: maven | "$(Agent.OS)" | **/pom.xml
+             path: $(MAVEN_CACHE_FOLDER)
+             restoreKeys: |
+               maven | "$(Agent.OS)"
+               maven
+         - task: SonarQubePrepare@6
+           inputs:
+              SonarQube: 'SonarQube'
+              scannerMode: 'Other'
+              configMode: file
+              extraProperties: |
+                sonar.projectKey=your-project-key
+                sonar.projectName=Your Project Name
+                sonar.language=java
+                sonar.sourceEncoding=UTF-8
+                sonar.test=core/src/test/**
+                sonar.java.binaries=.
+                sonar.coverage.jacoco.xmlReportPaths=$(JACOCO_CODECOVERAGE)
+           enabled: true
+  # Perform AEM maven build
+         - task: Maven@4
+           displayName: AEM Build
+           inputs:
+            goals: '-B package'
+            publishJUnitResults: true
+            mavenOpts: '-Xmx2048m $(MAVEN_OPTS)'
+            sonarQubeRunAnalysis: true
+         - task: SonarQubePublish@6
+           inputs:
+            pollingTimeoutSec: '300'
+         - task: PublishCodeCoverageResults@2
+           inputs:
+             summaryFileLocation: '$(System.DefaultWorkingDirectory)/core/target/site/jacoco/jacoco.xml'
+             failIfCoverageEmpty: true
